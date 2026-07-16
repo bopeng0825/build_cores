@@ -22,11 +22,11 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /opt
 
 
-RUN wget -O toolchain.tar.gz \
+RUN curl -L --retry 5 \
+    -o toolchain.tar.gz \
     https://github.com/game-de-it/sf3000/releases/download/sf3000_toolchain_v0.1/mipsel-buildroot-linux-gnu_sdk-buildroot.tar.gz \
  && tar xf toolchain.tar.gz \
  && rm toolchain.tar.gz
-
 
 ENV TOOLCHAIN=/opt/mipsel-buildroot-linux-gnu_sdk-buildroot
 
