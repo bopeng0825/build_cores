@@ -1,28 +1,66 @@
 #!/bin/bash
-# Clone all libretro core sources for SF3000 multicore.
-# Uses tzubertowski forks where improvements exist, standard libretro repos otherwise.
 set -e
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-mkdir -p "$ROOT/cores"
-cd "$ROOT/cores"
 
-clone() {
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+mkdir -p "$ROOT/cores"
+# =============================
+# 要编译的核心列表
+# =============================
+DEFAULT_BUILD_LIST=(
+    fceumm
+    quicknes
+    snes9x2005_plus
+    gpsp_multicore
+    gpsp
+)
+if [ "$#" -eq 0 ]; then
+    BUILD_LIST=("${DEFAULT_BUILD_LIST[@]}")
+else
+    BUILD_LIST=("$@")
+fi
+
+_need_clone()
+{
+    local name="$1"
+
+    for item in "${BUILD_LIST[@]}"; do
+        [ "$item" = "$name" ] && return 0
+    done
+
+    return 1
+}
+
+clone()
+{
     local dir="$1"
     local url="$2"
     local branch="${3:-}"
+
+    if ! _need_clone "$dir"; then
+        echo "SKIP $dir"
+        return
+    fi
+
     if [ -d "$dir/.git" ]; then
         echo "SKIP $dir (already cloned)"
     else
         echo "Cloning $dir..."
         if [ -n "$branch" ]; then
-            git clone --depth=1 --branch "$branch" "$url" "$dir"
+            git clone \
+                --depth=1 \
+                --branch "$branch" \
+                "$url" \
+                "$dir"
         else
-            git clone --depth=1 "$url" "$dir"
+            git clone \
+                --depth=1 \
+                "$url" \
+                "$dir"
         fi
     fi
 }
-
 # ── tzubertowski forks (improved/MIPS-optimised) ──────────────────────────────
 clone fceumm          https://github.com/tzubertowski/libretro-fceumm
 clone QuickNES_Core   https://github.com/libretro/QuickNES_Core
