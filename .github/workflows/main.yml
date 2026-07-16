@@ -8,11 +8,6 @@ on:
         required: false
         default: ""
 
-  push:
-    branches:
-      - main
-
-
 jobs:
   build:
 
@@ -26,11 +21,18 @@ jobs:
 
 
     # 构建docker环境
-    - name: Build Docker image
-      run: |
-        docker build \
-          -t sf3000-builder .
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        tags: sf3000-builder
+        load: true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
     # clone cores + build
     - name: Build cores

@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+echo "ARGS:"
+printf '<%s>\n' "$@"
+
+echo "BUILD_LIST:"
+printf '<%s>\n' "${BUILD_LIST[@]}"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
