@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "ARGS:"
-printf '<%s>\n' "$@"
-
-echo "BUILD_LIST:"
-printf '<%s>\n' "${BUILD_LIST[@]}"
-
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 mkdir -p "$ROOT/cores"
@@ -27,14 +21,26 @@ else
     BUILD_LIST=("$@")
 fi
 
+echo "ARGS:"
+printf '<%s>\n' "$@"
+
+echo "BUILD_LIST:"
+printf '<%s>\n' "${BUILD_LIST[@]}"
+
 _need_clone()
 {
     local name="$1"
 
-    for item in "${BUILD_LIST[@]}"; do
-        [ "$item" = "$name" ] && return 0
-    done
+    echo "check: $name"
 
+    for item in "${BUILD_LIST[@]}"; do
+        echo "  item=$item"
+        [ "$item" = "$name" ] && {
+            echo "  MATCH"
+            return 0
+        }
+    done
+    echo "  NO MATCH"
     return 1
 }
 
