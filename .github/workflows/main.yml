@@ -46,9 +46,13 @@ jobs:
             sf3000-builder \
             bash -c "
               chmod +x scripts/*.sh &&
+              pwd &&
+              ls -la &&
               scripts/core.sh &&
+              echo '=== after clone ===' &&
+              find /work -maxdepth 2 -type d | sort &&
               scripts/build.sh
-            "
+              "
 
         else
 
@@ -57,7 +61,11 @@ jobs:
             sf3000-builder \
             bash -c "
               chmod +x scripts/*.sh &&
-              scripts/core.sh ${{ github.event.inputs.cores }}
+              pwd &&
+              ls -la &&
+              scripts/core.sh ${{ github.event.inputs.cores }} &&
+              echo '=== after clone ===' &&
+              find /work -maxdepth 2 -type d | sort &&
               scripts/build.sh ${{ github.event.inputs.cores }}
             "
 
