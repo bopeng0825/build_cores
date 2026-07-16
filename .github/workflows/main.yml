@@ -55,7 +55,7 @@ jobs:
             sf3000-builder \
             bash -c "
               chmod +x scripts/*.sh &&
-              scripts/core.sh &&
+              scripts/core.sh ${{ github.event.inputs.cores }}
               scripts/build.sh ${{ github.event.inputs.cores }}
             "
 
