@@ -16,7 +16,6 @@ DEFAULT_BUILD_LIST=(
     quicknes
     snes9x2005_plus
     gpsp_multicore
-    gpsp
 )
 
 if [ "$#" -eq 0 ]; then
